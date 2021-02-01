@@ -1,6 +1,10 @@
-const TodoTemplate = () => {
+import TodoList from './TodoList.jsx';
+
+const TodoTemplate = ({ arrTodo }) => {
   return (
-    <div>Todo Template</div>
+    <TodoList
+      arrTodo={arrTodo}
+    />
   );
 };
 
