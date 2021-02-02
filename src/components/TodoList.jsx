@@ -10,12 +10,12 @@ const TodoList = ({ arrTodo, onCreate, onUpdate, onDelete, onToggle }) => {
   return (
     <ListWrapper>
       {
-        arrTodo.map(({ id, title, state, timestamp }) => (
+        arrTodo.map(({ id, title, checked, timestamp }) => (
           <TodoItem
             key={id}
             id={id}
             title={title}
-            state={state}
+            checked={checked}
             timestamp={timestamp}
             onCreate={onCreate}
             onToggle={onToggle}

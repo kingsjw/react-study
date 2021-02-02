@@ -2,7 +2,10 @@ import React from "react";
 import styled from 'styled-components';
 import TodoList from './TodoList';
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  max-width: 768px;
+  margin: 0 auto;
+`;
 
 const Title = styled.div`
   text-align: center;
