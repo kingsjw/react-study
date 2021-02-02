@@ -1,20 +1,30 @@
+import React from "react";
 import TodoItem from './TodoItem.jsx';
+import styled from 'styled-components';
 
-const TodoList = ({ arrTodo }) => {
+const ListWrapper = styled.div`
+  padding: 0 1rem;
+`;
+
+const TodoList = ({ arrTodo, onCreate, onUpdate, onDelete, onToggle }) => {
   return (
-    <div className='listWrapper'>
+    <ListWrapper>
       {
-        arrTodo.map(({ id, title, status, timestamp }) => (
+        arrTodo.map(({ id, title, state, timestamp }) => (
           <TodoItem
             key={id}
             id={id}
             title={title}
-            status={status}
+            state={state}
             timestamp={timestamp}
+            onCreate={onCreate}
+            onToggle={onToggle}
+            onDelete={onDelete}
+            onUpdate={onUpdate}
           />
         ))
       }
-    </div>
+    </ListWrapper>
   );
 };
 
