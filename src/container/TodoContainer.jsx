@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import TodoTemplate from '../components/TodoTemplate.jsx';
 
 const TodoContainer = () => {
@@ -23,9 +23,6 @@ const TodoContainer = () => {
     },
   ];
 
-  const handleToggle = () => {
-  };
-
   const handleUpdate = (objUpdateData) => {
     const { id } = objUpdateData;
     arrTestData[id - 1] = {
@@ -44,7 +41,6 @@ const TodoContainer = () => {
       onCreate={ handleCreate }
       onUpdate={ handleUpdate }
       onDelete={ handleDelete }
-      onToggle={ handleToggle }
     />
   );
 };

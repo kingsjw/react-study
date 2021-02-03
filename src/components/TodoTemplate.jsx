@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from 'styled-components';
 import TodoList from './TodoList';
+import { CSSTransition } from "react-transition-group";
+import '../styles/transition.css';
 
 const Wrapper = styled.div`
   max-width: 768px;
@@ -17,7 +19,28 @@ const Title = styled.div`
   }
 `;
 
-const TodoTemplate = ({ arrTodo, onCreate, onUpdate, onDelete, onToggle }) => {
+const Mask = styled.div`
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+`;
+
+const TodoTemplate = ({ arrTodo, onCreate, onUpdate, onDelete }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const handleMenuToggle = (isOpen) => {
+    setIsMenuOpen(isOpen);
+  };
+
+  useEffect(() => {
+    window.addEventListener("contextmenu", (e) => e.preventDefault());
+    return window.removeEventListener("contextmenu", (e) => e.preventDefault());
+  });
+
+  const maskRef = useRef(null);
+
   return (
     <Wrapper>
       <Title>
@@ -26,10 +49,19 @@ const TodoTemplate = ({ arrTodo, onCreate, onUpdate, onDelete, onToggle }) => {
       <TodoList
         arrTodo={arrTodo}
         onCreate={onCreate}
-        onToggle={onToggle}
         onDelete={onDelete}
         onUpdate={onUpdate}
+        openMenu={() => handleMenuToggle(true)}
       />
+      <CSSTransition
+        in={isMenuOpen}
+        classNames='fade'
+        timeout={300}
+        unmountOnExit
+        nodeRef={maskRef}
+      >
+        <Mask ref={maskRef} onClick={() => handleMenuToggle(false)}/>
+      </CSSTransition>
     </Wrapper>
   );
 };

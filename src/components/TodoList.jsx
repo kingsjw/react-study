@@ -6,7 +6,7 @@ const ListWrapper = styled.div`
   padding: 0 1rem;
 `;
 
-const TodoList = ({ arrTodo, onCreate, onUpdate, onDelete, onToggle }) => {
+const TodoList = ({ arrTodo, onCreate, onUpdate, onDelete, openMenu }) => {
   return (
     <ListWrapper>
       {
@@ -18,9 +18,9 @@ const TodoList = ({ arrTodo, onCreate, onUpdate, onDelete, onToggle }) => {
             checked={checked}
             timestamp={timestamp}
             onCreate={onCreate}
-            onToggle={onToggle}
             onDelete={onDelete}
             onUpdate={onUpdate}
+            openMenu={openMenu}
           />
         ))
       }

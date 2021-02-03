@@ -1,7 +1,7 @@
-import React, { useState, useEffect ,memo } from "react";
+import React, { useState ,memo } from "react";
 import styled from 'styled-components';
-import { CSSTransition } from 'react-transition-group';
 import '../styles/transition.css';
+import useLongPress from '../plugins/useLongPress';
 
 const ListItem = styled.div`
   padding: 1rem;
@@ -10,8 +10,13 @@ const ListItem = styled.div`
   border-radius: .75rem;
   box-shadow: 0 1px 11px 0 rgb(0 0 0 / 10%);
   cursor: pointer;
+  user-select: none;
+  transition: background-color .3s ease;
   &:first-child{
     margin-top: 0;
+  }
+  &:hover{
+    background-color: rgba(0, 0, 0, 0.01);
   }
 `;
 const ItemContent = styled.div`
@@ -40,7 +45,7 @@ const StatusBadge = styled.div`
   }
 `;
 
-const TodoItem = ({ id, title, checked, timestamp, onCreate, onUpdate, onDelete, onToggle }) => {
+const TodoItem = ({ id, title, checked, timestamp, onCreate, onUpdate, onDelete, openMenu }) => {
   const [isChange, setIsChange] = useState(checked);
 
   const update = (objData) => {
@@ -54,17 +59,26 @@ const TodoItem = ({ id, title, checked, timestamp, onCreate, onUpdate, onDelete,
     onUpdate(objUpdateData);
   };
 
-  const handleIsChange = () => {
+  const updateCheckedToggle = () => {
     setIsChange(!isChange);
-  };
-
-  const handleUpdate = () => {
-    handleIsChange();
     update({ checked: isChange });
   };
 
+  const onClick = () => {
+    updateCheckedToggle();
+  };
+  const onLongPress = () => {
+    openMenu(true);
+  };
+  const defaultOptions = {
+    shouldPreventDefault: true,
+    delay: 500,
+  };
+
+  const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
+
   return (
-    <ListItem onClick={ handleUpdate }>
+    <ListItem { ...longPressEvent }>
       <ItemContent>
         <div className="title">{ title }</div>
         <StatusBadge state={ isChange } />
