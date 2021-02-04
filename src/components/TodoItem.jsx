@@ -1,6 +1,5 @@
 import React, { useState ,memo } from "react";
 import styled from 'styled-components';
-import '../styles/transition.css';
 import useLongPress from '../plugins/useLongPress';
 
 const ListItem = styled.div`

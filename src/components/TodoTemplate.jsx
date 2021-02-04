@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 import TodoList from './TodoList';
-import { CSSTransition } from "react-transition-group";
-import '../styles/transition.css';
+import TodoMenu from './TodoMenu';
+import { useTransition, animated } from 'react-spring';
 
 const Wrapper = styled.div`
   max-width: 768px;
@@ -19,7 +19,7 @@ const Title = styled.div`
   }
 `;
 
-const Mask = styled.div`
+const Mask = styled(animated.div)`
   position: fixed;
   left: 0;
   right: 0;
@@ -34,12 +34,29 @@ const TodoTemplate = ({ arrTodo, onCreate, onUpdate, onDelete }) => {
     setIsMenuOpen(isOpen);
   };
 
+  const menuOnClick = (type) => {
+    console.log(type);
+    handleMenuToggle(false);
+  } ;
+
   useEffect(() => {
     window.addEventListener("contextmenu", (e) => e.preventDefault());
     return window.removeEventListener("contextmenu", (e) => e.preventDefault());
   });
 
-  const maskRef = useRef(null);
+  const menuTransform = useTransition(isMenuOpen, null, {
+    from: { transform: 'translateY(100%)' },
+    enter: { transform: 'translateY(0)' },
+    leave: { transform: 'translateY(100%)' },
+    config: { duration: 200 },
+    delay: 100,
+  });
+
+  const maskTransition = useTransition(isMenuOpen, null, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+  });
 
   return (
     <Wrapper>
@@ -53,15 +70,8 @@ const TodoTemplate = ({ arrTodo, onCreate, onUpdate, onDelete }) => {
         onUpdate={onUpdate}
         openMenu={() => handleMenuToggle(true)}
       />
-      <CSSTransition
-        in={isMenuOpen}
-        classNames='fade'
-        timeout={300}
-        unmountOnExit
-        nodeRef={maskRef}
-      >
-        <Mask ref={maskRef} onClick={() => handleMenuToggle(false)}/>
-      </CSSTransition>
+      { maskTransition.map(({ item, key, props}) => item && <Mask style={props} key={key} onClick={() => handleMenuToggle(false)}/>) }
+      { menuTransform.map(({ item, key, props}) => item && <TodoMenu menuOnClick={menuOnClick} style={props} key={key} />) }
     </Wrapper>
   );
 };
